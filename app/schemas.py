@@ -4,9 +4,9 @@ from datetime import datetime
 
 # Auth Schemas
 class UserSignup(BaseModel):
-    username: str = Field(..., min_length=3, max_length=50)
-    email: EmailStr
-    password: str = Field(..., min_length=6)
+    username: str = Field(..., min_length=2, max_length=50)
+    email: str = Field(..., min_length=3, max_length=100)
+    password: str = Field(..., min_length=4)
 
 class UserLogin(BaseModel):
     username_or_email: str

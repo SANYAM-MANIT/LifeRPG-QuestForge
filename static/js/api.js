@@ -55,7 +55,13 @@ class ApiClient {
       const data = await response.json();
 
       if (!response.ok) {
-        throw new Error(data.detail || 'An error occurred with the request');
+        let msg = 'An error occurred with the request';
+        if (typeof data.detail === 'string') {
+          msg = data.detail;
+        } else if (Array.isArray(data.detail)) {
+          msg = data.detail.map(d => `${d.loc ? d.loc[d.loc.length - 1] + ': ' : ''}${d.msg}`).join(', ');
+        }
+        throw new Error(msg);
       }
 
       return data;
