@@ -918,10 +918,11 @@ async function handleProfileSubmit(e) {
 
 function closeAllModals() {
   document.querySelectorAll('.modal-overlay').forEach(modal => {
-    if (modal.id !== 'auth-modal' || currentUser) {
-      modal.classList.add('hidden');
-    }
+    modal.classList.add('hidden');
   });
+  if (!currentUser) {
+    showLandingPage();
+  }
 }
 
 function showToast(message, type = 'info') {

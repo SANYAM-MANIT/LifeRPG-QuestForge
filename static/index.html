@@ -377,7 +377,7 @@
   <!-- ================= MODALS ================= -->
 
   <!-- 1. AUTH MODAL (SIGNUP / LOGIN) -->
-  <div id="auth-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/90 backdrop-blur-md hidden">
+  <div id="auth-modal" onclick="if(event.target === this) closeAllModals()" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/90 backdrop-blur-md hidden">
     <div class="glass-panel-glow w-full max-w-md p-8 rounded-3xl border border-indigo-500/40 relative">
       <button onclick="closeAllModals()" class="absolute top-5 right-5 text-gray-400 hover:text-white p-1">
         <i data-lucide="x" class="w-5 h-5"></i>
@@ -432,7 +432,7 @@
   </div>
 
   <!-- 2. CREATE / EDIT QUEST MODAL -->
-  <div id="quest-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/80 backdrop-blur-md hidden">
+  <div id="quest-modal" onclick="if(event.target === this) closeAllModals()" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/80 backdrop-blur-md hidden">
     <div class="glass-panel w-full max-w-lg p-6 sm:p-8 rounded-3xl border border-indigo-900/60 relative">
       <div class="flex items-center justify-between mb-6">
         <h3 id="quest-modal-title" class="text-xl font-black text-white rpg-title-font">Forge New Quest</h3>
@@ -515,7 +515,7 @@
   </div>
 
   <!-- 3. LEVEL UP CELEBRATION MODAL -->
-  <div id="levelup-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/90 backdrop-blur-md hidden">
+  <div id="levelup-modal" onclick="if(event.target === this) closeAllModals()" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/90 backdrop-blur-md hidden">
     <div class="glass-panel-glow level-up-modal-glow w-full max-w-sm p-8 rounded-3xl text-center border-2 border-amber-500/80 relative">
       <div class="w-20 h-20 mx-auto mb-4 rounded-full bg-gradient-to-tr from-amber-400 via-yellow-500 to-amber-600 flex items-center justify-center text-4xl shadow-2xl shadow-amber-500/50">
         👑
@@ -532,7 +532,7 @@
   </div>
 
   <!-- 4. PROFILE SETTINGS MODAL -->
-  <div id="profile-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/80 backdrop-blur-md hidden">
+  <div id="profile-modal" onclick="if(event.target === this) closeAllModals()" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/80 backdrop-blur-md hidden">
     <div class="glass-panel w-full max-w-md p-6 sm:p-8 rounded-3xl border border-gray-800 relative">
       <div class="flex items-center justify-between mb-6">
         <h3 class="text-xl font-black text-white rpg-title-font">Hero Profile Customization</h3>
