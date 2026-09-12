@@ -84,6 +84,14 @@ class ApiClient {
     return data;
   }
 
+  async loginDemo() {
+    const data = await this.request('/auth/demo', {
+      method: 'POST',
+    });
+    this.setToken(data.access_token);
+    return data;
+  }
+
   async getMe() {
     return await this.request('/auth/me');
   }

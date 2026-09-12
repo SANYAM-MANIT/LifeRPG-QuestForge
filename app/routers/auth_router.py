@@ -146,6 +146,75 @@ def login(login_data: UserLogin, db: Session = Depends(get_db)):
         "user": format_user_out(user, db)
     }
 
+@router.post("/demo", response_model=dict)
+def login_demo_user(db: Session = Depends(get_db)):
+    demo_user = db.query(User).filter(User.username == "demo_hero").first()
+    if not demo_user:
+        hashed_pwd = get_password_hash("demopassword123")
+        demo_user = User(
+            username="demo_hero",
+            email="demo_hero@example.com",
+            hashed_password=hashed_pwd,
+            gold=150,
+            gems=15,
+            hp=100,
+            max_hp=100,
+            streak_count=3,
+            longest_streak=3
+        )
+        db.add(demo_user)
+        db.commit()
+        db.refresh(demo_user)
+
+        initialize_user_rpg_state(db, demo_user.id)
+
+        # Starter quests for demo
+        starter_quests = [
+            Quest(
+                user_id=demo_user.id,
+                title="Solve 3 Dynamic Programming Problems",
+                description="Master recursion and memoization on LeetCode.",
+                category="Study",
+                difficulty="Hard",
+                xp_reward=100,
+                gold_reward=45,
+                attribute_target="Intellect",
+                recurrence="daily"
+            ),
+            Quest(
+                user_id=demo_user.id,
+                title="45-Minute Gym / Strength Training",
+                description="Bench press and squat session for peak physical discipline.",
+                category="Fitness",
+                difficulty="Medium",
+                xp_reward=60,
+                gold_reward=25,
+                attribute_target="Strength",
+                recurrence="daily"
+            ),
+            Quest(
+                user_id=demo_user.id,
+                title="Drink 2 Litres of Water & Sleep 8 Hours",
+                description="Rest and hydrate to restore baseline vitality.",
+                category="Health",
+                difficulty="Trivial",
+                xp_reward=20,
+                gold_reward=10,
+                attribute_target="Vitality",
+                recurrence="daily"
+            )
+        ]
+        for q in starter_quests:
+            db.add(q)
+        db.commit()
+
+    token = create_access_token(data={"sub": str(demo_user.id), "username": demo_user.username})
+    return {
+        "access_token": token,
+        "token_type": "bearer",
+        "user": format_user_out(demo_user, db)
+    }
+
 @router.get("/me", response_model=UserOut)
 def get_current_user_profile(current_user: User = Depends(get_current_user), db: Session = Depends(get_db)):
     return format_user_out(current_user, db)

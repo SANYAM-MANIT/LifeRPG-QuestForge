@@ -879,6 +879,21 @@ async function handleAuthFormSubmit(e) {
   }
 }
 
+async function handleDemoLogin() {
+  try {
+    showToast('Entering as Demo Hero...', 'info');
+    await api.loginDemo();
+    soundManager.playLevelUp();
+    triggerConfettiFireworks();
+    showToast('Welcome, Demo Hero! Your RPG adventure awaits.', 'success');
+    await loadUserData();
+    switchTab('quests');
+  } catch (error) {
+    soundManager.playError();
+    showToast(error.message, 'error');
+  }
+}
+
 function openProfileModal() {
   if (!currentUser) return;
   document.getElementById('profile-title-input').value = currentUser.title;
