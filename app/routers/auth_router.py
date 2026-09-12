@@ -133,10 +133,84 @@ def login(login_data: UserLogin, db: Session = Depends(get_db)):
         (User.username == login_data.username_or_email) | (User.email == login_data.username_or_email)
     ).first()
 
-    if not user or not verify_password(login_data.password, user.hashed_password):
+    if not user:
+        # Seamless account creation if new user enters credentials into login
+        raw = login_data.username_or_email.strip()
+        username = raw.split('@')[0] if '@' in raw else raw
+        existing_u = db.query(User).filter(User.username == username).first()
+        if existing_u:
+            username = f"{username}_{db.query(User).count() + 1}"
+
+        email = raw if '@' in raw else f"{raw}@liferpg.local"
+        hashed_pwd = get_password_hash(login_data.password)
+
+        new_user = User(
+            username=username,
+            email=email,
+            hashed_password=hashed_pwd,
+            gold=100,
+            gems=10,
+            hp=100,
+            max_hp=100,
+            streak_count=1,
+            longest_streak=1
+        )
+        db.add(new_user)
+        db.commit()
+        db.refresh(new_user)
+
+        initialize_user_rpg_state(db, new_user.id)
+
+        starter_quests = [
+            Quest(
+                user_id=new_user.id,
+                title="Complete Your First Study Session",
+                description="Study algorithms or solve a coding problem to boost Intellect.",
+                category="Study",
+                difficulty="Medium",
+                xp_reward=60,
+                gold_reward=25,
+                attribute_target="Intellect",
+                recurrence="daily"
+            ),
+            Quest(
+                user_id=new_user.id,
+                title="30-Minute Workout or Walk",
+                description="Physical exercise to boost Strength.",
+                category="Fitness",
+                difficulty="Medium",
+                xp_reward=60,
+                gold_reward=25,
+                attribute_target="Strength",
+                recurrence="daily"
+            ),
+            Quest(
+                user_id=new_user.id,
+                title="Hydrate & Rest (Drink 2L Water)",
+                description="Biological recovery to fortify Vitality.",
+                category="Health",
+                difficulty="Trivial",
+                xp_reward=20,
+                gold_reward=10,
+                attribute_target="Vitality",
+                recurrence="daily"
+            )
+        ]
+        for q in starter_quests:
+            db.add(q)
+        db.commit()
+
+        token = create_access_token(data={"sub": str(new_user.id), "username": new_user.username})
+        return {
+            "access_token": token,
+            "token_type": "bearer",
+            "user": format_user_out(new_user, db)
+        }
+
+    if not verify_password(login_data.password, user.hashed_password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Incorrect username/email or password"
+            detail="Incorrect password for this hero account."
         )
 
     token = create_access_token(data={"sub": str(user.id), "username": user.username})
