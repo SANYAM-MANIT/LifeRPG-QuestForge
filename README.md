@@ -153,5 +153,13 @@ life-rpg/
 
 ---
 
-## 📜 Evaluation & Video Script
-A complete 90–180 second screen recording demonstration script is available in [`demo_walkthrough_script.md`](./demo_walkthrough_script.md).
+## 📹 Walkthrough Demonstration Video
+- **Video File in Repository**: [`walkthrough_demo.mp4`](./walkthrough_demo.mp4) (87 MB, Full HD)
+- **Evaluation Script**: [`demo_walkthrough_script.md`](./demo_walkthrough_script.md)
+
+The demonstration video showcases:
+1. User registration & authentication session.
+2. Creating and completing custom study & fitness quests with 8-bit sound effects.
+3. RPG progression with non-linear XP thresholds and Level-Up fanfare celebration.
+4. Adventurer's Bazaar shop gear purchase and equipping.
+5. Browser refresh demonstrating 100% database persistence.
