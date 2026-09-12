@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Life RPG - Gamify Your Productivity & Level Up In Real Life</title>
-  <meta name="description" content="A full-stack gamified productivity web application translating real-world tasks into RPG progression, attributes, gear rewards, and dungeon raids.">
+  <title>Life RPG - Gamify Your Studies & Daily Life</title>
+  <meta name="description" content="A full-stack gamified productivity web app built to turn mundane student tasks, coding, gym, and habits into an RPG progression adventure.">
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -34,24 +34,24 @@
   <!-- Custom Stylesheets -->
   <link rel="stylesheet" href="/static/css/style.css">
 </head>
-<body class="antialiased selection:bg-indigo-500 selection:text-white">
+<body class="antialiased selection:bg-indigo-500 selection:text-white flex flex-col min-h-screen">
 
   <!-- TOP APP BAR -->
   <header class="sticky top-0 z-40 border-b border-gray-800/80 bg-gray-950/80 backdrop-blur-xl">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
       
       <!-- Brand Logo -->
-      <div class="flex items-center gap-3 cursor-pointer" onclick="switchTab('quests')">
+      <div class="flex items-center gap-3 cursor-pointer" onclick="handleLogoClick()">
         <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/25">
           <i data-lucide="shield" class="w-5 h-5"></i>
         </div>
         <div>
           <h1 class="font-black text-lg text-white rpg-title-font tracking-wide">LIFE RPG</h1>
-          <p class="text-[10px] text-indigo-400 font-semibold uppercase tracking-wider">Productivity Adventure</p>
+          <p class="text-[10px] text-indigo-400 font-semibold uppercase tracking-wider">Level Up In Real Life</p>
         </div>
       </div>
 
-      <!-- Quick Player Stats Header -->
+      <!-- Quick Player Stats Header (Logged In only) -->
       <div id="top-player-stats" class="hidden md:flex items-center gap-5 text-xs font-bold">
         <!-- Streak -->
         <div class="flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-amber-950/40 border border-amber-800/60 text-amber-400 shadow-sm" title="Active Daily Streak">
@@ -70,26 +70,128 @@
         </div>
       </div>
 
-      <!-- Right Controls: Sound, Profile, Logout -->
+      <!-- Right Controls: Sound, Profile, Auth Buttons -->
       <div class="flex items-center gap-2">
         <button id="sound-toggle-btn" title="Toggle 8-bit Audio SFX" class="p-2 rounded-xl text-gray-400 hover:text-white bg-gray-900 border border-gray-800 hover:border-gray-700 transition">
           <i id="sound-icon" data-lucide="volume-2" class="w-5 h-5"></i>
         </button>
 
-        <button onclick="openProfileModal()" title="Hero Profile Settings" class="p-2 rounded-xl text-gray-400 hover:text-white bg-gray-900 border border-gray-800 hover:border-gray-700 transition">
-          <i data-lucide="user" class="w-5 h-5"></i>
-        </button>
+        <div id="logged-in-controls" class="hidden flex items-center gap-2">
+          <button onclick="openProfileModal()" title="Hero Profile Settings" class="p-2 rounded-xl text-gray-400 hover:text-white bg-gray-900 border border-gray-800 hover:border-gray-700 transition">
+            <i data-lucide="user" class="w-5 h-5"></i>
+          </button>
 
-        <button id="logout-btn" title="Log Out" class="p-2 rounded-xl text-gray-400 hover:text-rose-400 bg-gray-900 border border-gray-800 hover:border-rose-900/60 transition">
-          <i data-lucide="log-out" class="w-5 h-5"></i>
-        </button>
+          <button id="logout-btn" title="Log Out" class="p-2 rounded-xl text-gray-400 hover:text-rose-400 bg-gray-900 border border-gray-800 hover:border-rose-900/60 transition">
+            <i data-lucide="log-out" class="w-5 h-5"></i>
+          </button>
+        </div>
+
+        <div id="guest-controls" class="flex items-center gap-2">
+          <button onclick="showAuthModal('login')" class="px-3.5 py-1.5 rounded-xl text-xs font-bold text-gray-300 hover:text-white bg-gray-900 border border-gray-800 hover:border-gray-700 transition">
+            Log In
+          </button>
+          <button onclick="showAuthModal('signup')" class="px-4 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 shadow-md shadow-indigo-600/20 transition">
+            Sign Up Free
+          </button>
+        </div>
       </div>
 
     </div>
   </header>
 
-  <!-- MAIN APP CONTAINER -->
-  <main id="app-main-content" class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 hidden">
+  <!-- ================= PUBLIC STUDENT LANDING PAGE (WHEN NOT LOGGED IN) ================= -->
+  <div id="public-landing-page" class="flex-1 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12 flex flex-col justify-center">
+    
+    <!-- Hero Header -->
+    <div class="text-center max-w-3xl mx-auto mb-12">
+      <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-950/70 border border-indigo-800/80 text-indigo-300 text-xs font-semibold mb-6 shadow-inner">
+        <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+        Student Web Development Project • Full-Stack Life RPG
+      </div>
+
+      <h1 class="text-4xl sm:text-6xl font-black text-white rpg-title-font leading-tight mb-6">
+        Turn Your Daily Chores Into an <span class="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-400 to-pink-400">Epic RPG Adventure</span>
+      </h1>
+
+      <p class="text-base sm:text-lg text-gray-300 leading-relaxed mb-8">
+        Real-world habits like studying algorithms, hitting the gym, and staying hydrated take months to pay off. 
+        <strong>Life RPG</strong> brings instant dopamine: earn XP, level up your stats, buy weapons in the shop, and battle the Procrastination Dragon!
+      </p>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <button onclick="showAuthModal('signup')" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-bold text-sm shadow-xl shadow-indigo-600/30 transition transform hover:-translate-y-0.5">
+          ⚔️ Start Your Adventure Free
+        </button>
+        <button onclick="showAuthModal('login')" class="w-full sm:w-auto px-8 py-3.5 rounded-2xl bg-gray-900/90 hover:bg-gray-800 text-gray-200 border border-gray-800 font-bold text-sm transition">
+          Resume Game (Log In)
+        </button>
+      </div>
+    </div>
+
+    <!-- 4 Interactive Feature Highlights -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+      <!-- Card 1 -->
+      <div class="glass-panel p-6 rounded-2xl border border-gray-800/80 hover:border-indigo-500/50 transition">
+        <div class="w-12 h-12 rounded-xl bg-indigo-950/80 border border-indigo-800 text-indigo-400 flex items-center justify-center text-xl mb-4">
+          📜
+        </div>
+        <h3 class="font-bold text-white text-base mb-1">Quests & Daily Habits</h3>
+        <p class="text-xs text-gray-400 leading-relaxed">
+          Create one-time tasks or daily habits. Pick difficulties from Trivial to Epic with dynamic XP scaling.
+        </p>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="glass-panel p-6 rounded-2xl border border-gray-800/80 hover:border-purple-500/50 transition">
+        <div class="w-12 h-12 rounded-xl bg-purple-950/80 border border-purple-800 text-purple-400 flex items-center justify-center text-xl mb-4">
+          ⚡
+        </div>
+        <h3 class="font-bold text-white text-base mb-1">6 Core Attributes</h3>
+        <p class="text-xs text-gray-400 leading-relaxed">
+          Level up Intellect (coding/study), Strength (gym), Vitality (health), Agility, Charisma, and Focus.
+        </p>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="glass-panel p-6 rounded-2xl border border-gray-800/80 hover:border-amber-500/50 transition">
+        <div class="w-12 h-12 rounded-xl bg-amber-950/80 border border-amber-800 text-amber-400 flex items-center justify-center text-xl mb-4">
+          🪙
+        </div>
+        <h3 class="font-bold text-white text-base mb-1">Shop & Inventory</h3>
+        <p class="text-xs text-gray-400 leading-relaxed">
+          Earn gold on every completed quest. Buy swords, health potions, streak shields, and badges in the Bazaar.
+        </p>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="glass-panel p-6 rounded-2xl border border-gray-800/80 hover:border-pink-500/50 transition">
+        <div class="w-12 h-12 rounded-xl bg-pink-950/80 border border-pink-800 text-pink-400 flex items-center justify-center text-xl mb-4">
+          🐲
+        </div>
+        <h3 class="font-bold text-white text-base mb-1">Dungeon Boss Raids</h3>
+        <p class="text-xs text-gray-400 leading-relaxed">
+          Every task completed deals damage to the Procrastination Drake. Defeat bosses for rare gems and gear!
+        </p>
+      </div>
+    </div>
+
+    <!-- Student Tech Stack Specs Bar -->
+    <div class="glass-panel p-6 rounded-2xl border border-gray-800 text-center">
+      <h4 class="text-xs uppercase font-extrabold tracking-widest text-gray-400 mb-3">Full-Stack Architecture & Specs</h4>
+      <div class="flex flex-wrap items-center justify-center gap-3 text-xs font-semibold text-gray-300">
+        <span class="px-3 py-1 rounded-lg bg-gray-900 border border-gray-800">🐍 Python FastAPI</span>
+        <span class="px-3 py-1 rounded-lg bg-gray-900 border border-gray-800">🗄️ SQLite / SQLAlchemy DB</span>
+        <span class="px-3 py-1 rounded-lg bg-gray-900 border border-gray-800">🔒 JWT & Bcrypt Auth</span>
+        <span class="px-3 py-1 rounded-lg bg-gray-900 border border-gray-800">🎨 Tailwind CSS SPA</span>
+        <span class="px-3 py-1 rounded-lg bg-gray-900 border border-gray-800">🔊 8-Bit Web Audio API</span>
+        <span class="px-3 py-1 rounded-lg bg-gray-900 border border-gray-800">✨ Canvas Confetti</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= MAIN AUTHENTICATED GAME APP CONTAINER ================= -->
+  <main id="app-main-content" class="flex-1 max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8 hidden">
     
     <!-- HERO STATUS CARD -->
     <section class="glass-panel-glow p-6 sm:p-8 rounded-3xl mb-8 relative overflow-hidden">
@@ -261,11 +363,23 @@
 
   </main>
 
+  <!-- FOOTER -->
+  <footer class="mt-auto border-t border-gray-800/80 bg-gray-950/60 py-6 text-center text-xs text-gray-500">
+    <div class="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <p>⚔️ <strong>Life RPG</strong> — Gamify Your Studies & Daily Tasks</p>
+      <p>Built with Python (FastAPI), SQLite & Tailwind CSS • Student Project</p>
+    </div>
+  </footer>
+
   <!-- ================= MODALS ================= -->
 
   <!-- 1. AUTH MODAL (SIGNUP / LOGIN) -->
   <div id="auth-modal" class="modal-overlay fixed inset-0 z-50 flex items-center justify-center p-4 bg-gray-950/90 backdrop-blur-md hidden">
     <div class="glass-panel-glow w-full max-w-md p-8 rounded-3xl border border-indigo-500/40 relative">
+      <button onclick="closeAllModals()" class="absolute top-5 right-5 text-gray-400 hover:text-white p-1">
+        <i data-lucide="x" class="w-5 h-5"></i>
+      </button>
+
       <div class="text-center mb-6">
         <div class="w-14 h-14 mx-auto mb-3 rounded-2xl bg-gradient-to-tr from-indigo-600 to-pink-500 flex items-center justify-center text-white shadow-xl shadow-indigo-600/30">
           <i data-lucide="swords" class="w-7 h-7"></i>
@@ -279,17 +393,17 @@
 
         <div>
           <label class="block text-xs font-bold text-gray-300 mb-1">Username / Adventurer Name</label>
-          <input type="text" id="auth-username-input" required class="w-full px-4 py-2.5 rounded-xl bg-gray-900/90 border border-gray-800 text-white text-sm focus:outline-none focus:border-indigo-500">
+          <input type="text" id="auth-username-input" placeholder="e.g., AlexTheHero" required class="w-full px-4 py-2.5 rounded-xl bg-gray-900/90 border border-gray-800 text-white text-sm focus:outline-none focus:border-indigo-500">
         </div>
 
         <div id="auth-email-container">
           <label class="block text-xs font-bold text-gray-300 mb-1">Email Address</label>
-          <input type="email" id="auth-email-input" class="w-full px-4 py-2.5 rounded-xl bg-gray-900/90 border border-gray-800 text-white text-sm focus:outline-none focus:border-indigo-500">
+          <input type="email" id="auth-email-input" placeholder="alex@example.com" class="w-full px-4 py-2.5 rounded-xl bg-gray-900/90 border border-gray-800 text-white text-sm focus:outline-none focus:border-indigo-500">
         </div>
 
         <div>
           <label class="block text-xs font-bold text-gray-300 mb-1">Password</label>
-          <input type="password" id="auth-password-input" required minlength="6" class="w-full px-4 py-2.5 rounded-xl bg-gray-900/90 border border-gray-800 text-white text-sm focus:outline-none focus:border-indigo-500">
+          <input type="password" id="auth-password-input" placeholder="••••••••" required minlength="6" class="w-full px-4 py-2.5 rounded-xl bg-gray-900/90 border border-gray-800 text-white text-sm focus:outline-none focus:border-indigo-500">
         </div>
 
         <button type="submit" id="auth-submit-btn" class="w-full mt-2 py-3 rounded-xl bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 hover:from-indigo-500 hover:to-pink-500 text-white font-bold text-sm shadow-xl shadow-indigo-600/30 transition">
@@ -325,7 +439,7 @@
 
         <div>
           <label class="block text-xs font-bold text-gray-300 mb-1">Description (Optional)</label>
-          <textarea id="quest-desc-input" rows="2" placeholder="Provide extra details or instructions..." class="w-full px-4 py-2 rounded-xl bg-gray-900/90 border border-gray-800 text-white text-sm focus:outline-none focus:border-indigo-500"></textarea>
+          <textarea id="quest-desc-input" rows="2" placeholder="Provide extra details or study notes..." class="w-full px-4 py-2 rounded-xl bg-gray-900/90 border border-gray-800 text-white text-sm focus:outline-none focus:border-indigo-500"></textarea>
         </div>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -397,7 +511,7 @@
       <h3 class="text-xs uppercase font-extrabold tracking-widest text-amber-400 mb-1 pixel-font">LEVEL UP!</h3>
       <h2 class="text-3xl font-black text-white rpg-title-font mb-2">Level <span id="levelup-number">2</span> Reached!</h2>
       <p class="text-xs text-gray-300 mb-6 leading-relaxed">
-        Your dedication has borne fruit. Maximum HP boosted, full recovery granted, and bonus gold awarded!
+        Your real-world grind paid off! Max HP boosted, full recovery granted, and bonus gold added to your pouch!
       </p>
       <button onclick="closeAllModals()" class="w-full py-3 rounded-xl bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-gray-950 font-black text-sm shadow-xl shadow-amber-500/30 transition">
         Claim Rewards & Continue
@@ -417,7 +531,7 @@
 
       <form onsubmit="handleProfileSubmit(event)" class="flex flex-col gap-4">
         <div>
-          <label class="block text-xs font-bold text-gray-300 mb-1">Title</label>
+          <label class="block text-xs font-bold text-gray-300 mb-1">Custom Title</label>
           <input type="text" id="profile-title-input" class="w-full px-4 py-2.5 rounded-xl bg-gray-900 border border-gray-800 text-white text-sm focus:outline-none focus:border-indigo-500">
         </div>
 

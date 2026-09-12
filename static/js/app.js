@@ -20,12 +20,28 @@ document.addEventListener('DOMContentLoaded', async () => {
       switchTab('quests');
     } catch (e) {
       console.warn('Session expired or invalid:', e);
-      showAuthModal('login');
+      showLandingPage();
     }
   } else {
-    showAuthModal('signup');
+    showLandingPage();
   }
 });
+
+function handleLogoClick() {
+  if (currentUser) {
+    switchTab('quests');
+  } else {
+    showLandingPage();
+  }
+}
+
+function showLandingPage() {
+  document.getElementById('public-landing-page')?.classList.remove('hidden');
+  document.getElementById('app-main-content')?.classList.add('hidden');
+  document.getElementById('guest-controls')?.classList.remove('hidden');
+  document.getElementById('logged-in-controls')?.classList.add('hidden');
+  document.getElementById('top-player-stats')?.classList.add('hidden');
+}
 
 function initLucide() {
   if (window.lucide) {
@@ -62,7 +78,7 @@ function setupEventListeners() {
       api.setToken(null);
       currentUser = null;
       showToast('Logged out successfully', 'info');
-      showAuthModal('login');
+      showLandingPage();
     });
   }
 
@@ -156,7 +172,11 @@ async function loadUserData() {
   currentUser = await api.getMe();
   renderUserHeader();
   document.getElementById('auth-modal')?.classList.add('hidden');
+  document.getElementById('public-landing-page')?.classList.add('hidden');
   document.getElementById('app-main-content')?.classList.remove('hidden');
+  document.getElementById('guest-controls')?.classList.add('hidden');
+  document.getElementById('logged-in-controls')?.classList.remove('hidden');
+  document.getElementById('top-player-stats')?.classList.remove('hidden');
 }
 
 // Render User Status in Top Bar & Hero Header
