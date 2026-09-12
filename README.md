@@ -1,5 +1,9 @@
 # ⚔️ Life RPG - Gamify Your Studies & Habits
 
+> **Project by**: Sanyam Jain & Vedik Bandi  
+> **Institute**: Maulana Azad National Institute of Technology (MANIT), Bhopal  
+> **Tech Stack**: Python (FastAPI), SQLite / SQLAlchemy, Tailwind CSS, Web Audio API
+
 A full-stack web application built to solve the delayed-gratification problem of student life by turning real-world tasks (coding, study sessions, gym workouts, habits) into an interactive RPG progression game.
 
 ---
