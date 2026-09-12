@@ -198,6 +198,12 @@ function renderUserHeader() {
     avatarImg.src = getAvatarUrl(currentUser.avatar);
   }
 
+  // Mobile stats sync
+  const streakMob = document.getElementById('user-streak-mob');
+  if (streakMob) streakMob.innerText = `${currentUser.streak_count}d`;
+  const goldMob = document.getElementById('user-gold-mob');
+  if (goldMob) goldMob.innerText = currentUser.gold.toLocaleString();
+
   initLucide();
 }
 
