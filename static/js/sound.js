@@ -1,4 +1,4 @@
-// 8-Bit Web Audio API Sound Synthesizer for Life RPG
+// 8-Bit Web Audio API Sound Synthesizer for Life RPG (Safari & Chrome Compatible)
 class SoundManager {
   constructor() {
     this.ctx = null;
@@ -6,11 +6,18 @@ class SoundManager {
   }
 
   init() {
-    if (!this.ctx) {
-      const AudioCtx = window.AudioContext || window.webkitAudioContext;
-      if (AudioCtx) {
-        this.ctx = new AudioCtx();
+    try {
+      if (!this.ctx) {
+        const AudioCtx = window.AudioContext || window.webkitAudioContext;
+        if (AudioCtx) {
+          this.ctx = new AudioCtx();
+        }
       }
+      if (this.ctx && this.ctx.state === 'suspended') {
+        this.ctx.resume();
+      }
+    } catch (e) {
+      console.warn('Web Audio init error:', e);
     }
   }
 
@@ -24,10 +31,14 @@ class SoundManager {
     return this.muted;
   }
 
-  playTone(freq, type = 'square', duration = 0.1, delay = 0, volume = 0.15) {
+  playTone(freq, type = 'square', duration = 0.15, delay = 0, volume = 0.35) {
     if (this.muted) return;
     this.init();
     if (!this.ctx) return;
+
+    if (this.ctx.state === 'suspended') {
+      this.ctx.resume();
+    }
 
     setTimeout(() => {
       try {
@@ -52,29 +63,28 @@ class SoundManager {
   }
 
   playQuestComplete() {
-    // Upbeat rising arpeggio (C5 -> E5 -> G5 -> C6)
-    this.playTone(523.25, 'triangle', 0.12, 0.0, 0.2);
-    this.playTone(659.25, 'triangle', 0.12, 0.08, 0.2);
-    this.playTone(783.99, 'triangle', 0.15, 0.16, 0.22);
-    this.playTone(1046.50, 'sine', 0.25, 0.24, 0.25);
+    // Crisp, vibrant rising 8-bit arpeggio (C5 -> E5 -> G5 -> C6)
+    this.playTone(523.25, 'triangle', 0.14, 0.0, 0.35);
+    this.playTone(659.25, 'triangle', 0.14, 0.09, 0.35);
+    this.playTone(783.99, 'triangle', 0.16, 0.18, 0.38);
+    this.playTone(1046.50, 'sine', 0.3, 0.27, 0.4);
   }
 
   playCoinSound() {
-    // Classic 2-tone coin (B5 -> E6)
-    this.playTone(987.77, 'sine', 0.08, 0.0, 0.18);
-    this.playTone(1318.51, 'sine', 0.22, 0.07, 0.2);
+    // Classic 2-tone coin pickup (B5 -> E6)
+    this.playTone(987.77, 'sine', 0.1, 0.0, 0.35);
+    this.playTone(1318.51, 'sine', 0.25, 0.08, 0.4);
   }
 
   playLevelUp() {
     // Epic 6-tone level-up fanfare
     const notes = [440, 554.37, 659.25, 880, 783.99, 1046.50];
     notes.forEach((freq, idx) => {
-      this.playTone(freq, 'sawtooth', 0.2, idx * 0.1, 0.15);
+      this.playTone(freq, 'sawtooth', 0.25, idx * 0.1, 0.3);
     });
   }
 
   playBossHit() {
-    // Crunchy impact hit
     if (this.muted) return;
     this.init();
     if (!this.ctx) return;
@@ -83,39 +93,41 @@ class SoundManager {
       const osc = this.ctx.createOscillator();
       const gain = this.ctx.createGain();
       osc.type = 'sawtooth';
-      osc.frequency.setValueAtTime(160, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(40, this.ctx.currentTime + 0.18);
+      osc.frequency.setValueAtTime(180, this.ctx.currentTime);
+      osc.frequency.exponentialRampToValueAtTime(35, this.ctx.currentTime + 0.2);
 
-      gain.gain.setValueAtTime(0.3, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.18);
+      gain.gain.setValueAtTime(0.4, this.ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.2);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
 
       osc.start();
-      osc.stop(this.ctx.currentTime + 0.18);
+      osc.stop(this.ctx.currentTime + 0.2);
     } catch (e) {}
   }
 
   playEquip() {
-    // Crisp click / swish
-    this.playTone(400, 'sine', 0.05, 0.0, 0.15);
-    this.playTone(800, 'triangle', 0.08, 0.04, 0.15);
+    this.playTone(450, 'sine', 0.08, 0.0, 0.3);
+    this.playTone(850, 'triangle', 0.12, 0.05, 0.3);
   }
 
   playPotion() {
-    // Magical bubbly heal sound
-    const notes = [300, 450, 600, 750, 900];
+    const notes = [320, 480, 640, 800, 960];
     notes.forEach((freq, idx) => {
-      this.playTone(freq, 'sine', 0.1, idx * 0.05, 0.12);
+      this.playTone(freq, 'sine', 0.12, idx * 0.06, 0.25);
     });
   }
 
   playError() {
-    // Low warning buzz
-    this.playTone(150, 'sawtooth', 0.15, 0.0, 0.2);
-    this.playTone(130, 'sawtooth', 0.2, 0.12, 0.2);
+    this.playTone(180, 'sawtooth', 0.18, 0.0, 0.3);
+    this.playTone(140, 'sawtooth', 0.25, 0.14, 0.3);
   }
 }
 
 const soundManager = new SoundManager();
+
+// Automatically unlock Web Audio on first user interaction for Safari/Chrome autoplay policy
+document.addEventListener('click', () => {
+  soundManager.init();
+}, { once: false });
