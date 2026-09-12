@@ -1,0 +1,176 @@
+/* Custom Retro / Modern Dark Fantasy Styling for Life RPG */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Press+Start+2P&display=swap');
+
+:root {
+  --bg-primary: #0b0f19;
+  --bg-card: rgba(23, 32, 54, 0.75);
+  --border-card: rgba(99, 102, 241, 0.2);
+  --accent-gold: #f59e0b;
+  --accent-xp: #8b5cf6;
+  --accent-hp: #ef4444;
+  --accent-cyan: #06b6d4;
+  --accent-boss: #ec4899;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  background-color: var(--bg-primary);
+  color: #f3f4f6;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.15) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(236, 72, 153, 0.1) 0px, transparent 50%);
+  background-attachment: fixed;
+}
+
+.rpg-title-font {
+  font-family: 'Cinzel', serif;
+  letter-spacing: 0.05em;
+}
+
+.pixel-font {
+  font-family: 'Press Start 2P', monospace;
+}
+
+/* Glassmorphic Cards */
+.glass-panel {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border-card);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.glass-panel-glow {
+  background: var(--bg-card);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(139, 92, 246, 0.4);
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.25);
+}
+
+/* Animated Progress Bars */
+.progress-bar-fill {
+  transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  background-image: linear-gradient(
+    -45deg,
+    rgba(255, 255, 255, 0.2) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.2) 50%,
+    rgba(255, 255, 255, 0.2) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 20px 20px;
+  animation: move-stripes 2s linear infinite;
+}
+
+@keyframes move-stripes {
+  0% { background-position: 0 0; }
+  100% { background-position: 20px 20px; }
+}
+
+/* Floating Combat Numbers */
+.floating-combat-text {
+  position: fixed;
+  pointer-events: none;
+  font-family: 'Press Start 2P', monospace;
+  font-size: 13px;
+  font-weight: bold;
+  z-index: 99999;
+  text-shadow: 0 0 8px rgba(0, 0, 0, 0.9), 0 0 16px currentColor;
+  animation: float-up-fade 1.2s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+@keyframes float-up-fade {
+  0% {
+    opacity: 0;
+    transform: translateY(0) scale(0.6);
+  }
+  20% {
+    opacity: 1;
+    transform: translateY(-20px) scale(1.15);
+  }
+  80% {
+    opacity: 1;
+    transform: translateY(-45px) scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-65px) scale(0.85);
+  }
+}
+
+/* Level Up Fanfare Pulse */
+@keyframes levelUpGlow {
+  0% { transform: scale(0.9); box-shadow: 0 0 0 0 rgba(245, 158, 11, 0.7); }
+  50% { transform: scale(1.03); box-shadow: 0 0 40px 20px rgba(245, 158, 11, 0.4); }
+  100% { transform: scale(1); box-shadow: 0 0 15px 5px rgba(245, 158, 11, 0.2); }
+}
+
+.level-up-modal-glow {
+  animation: levelUpGlow 0.8s ease-out;
+}
+
+/* Boss Health Bar Pulse */
+.boss-hp-bar {
+  transition: width 0.4s ease-in-out;
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: rgba(11, 15, 25, 0.8);
+}
+::-webkit-scrollbar-thumb {
+  background: rgba(99, 102, 241, 0.4);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(139, 92, 246, 0.7);
+}
+
+/* Interactive Card Hover Effects */
+.quest-card {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.quest-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(139, 92, 246, 0.6);
+  box-shadow: 0 10px 25px -5px rgba(139, 92, 246, 0.2);
+}
+
+.item-card {
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.item-card:hover {
+  transform: translateY(-3px) scale(1.02);
+}
+
+/* Cyberpunk Alternative Theme */
+body.theme-cyberpunk {
+  --bg-primary: #05050c;
+  --bg-card: rgba(13, 15, 30, 0.85);
+  --border-card: rgba(6, 182, 212, 0.3);
+  --accent-gold: #facc15;
+  --accent-xp: #06b6d4;
+  --accent-hp: #f43f5e;
+}
+body.theme-cyberpunk .glass-panel {
+  border-color: rgba(6, 182, 212, 0.3);
+  box-shadow: 0 0 15px rgba(6, 182, 212, 0.15);
+}
