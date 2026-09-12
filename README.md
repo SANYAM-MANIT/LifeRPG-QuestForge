@@ -2,9 +2,19 @@
 
 > **Project by**: Sanyam Jain & Vedik Bandi  
 > **Institute**: Maulana Azad National Institute of Technology (MANIT), Bhopal  
-> **Tech Stack**: Python (FastAPI), SQLite / SQLAlchemy, Tailwind CSS, Web Audio API
+> **Tech Stack**: Python (FastAPI), SQLite / SQLAlchemy, Tailwind CSS, Web Audio API  
+> **Live Deployed App**: [https://liferpg-questforge.onrender.com](https://liferpg-questforge.onrender.com)  
+> **Walkthrough Demo Video**: [Watch Demo Video (87MB MP4)](./walkthrough_demo.mp4)
 
 A full-stack web application built to solve the delayed-gratification problem of student life by turning real-world tasks (coding, study sessions, gym workouts, habits) into an interactive RPG progression game.
+
+---
+
+## 🔗 Quick Links
+- 🚀 **Live Deployed URL**: [https://liferpg-questforge.onrender.com](https://liferpg-questforge.onrender.com)
+- 📹 **Demo Walkthrough Video**: [`walkthrough_demo.mp4`](./walkthrough_demo.mp4)
+- 📖 **Interactive API Documentation**: [https://liferpg-questforge.onrender.com/docs](https://liferpg-questforge.onrender.com/docs)
+- 🎬 **Video Script & Evaluation Checklist**: [`demo_walkthrough_script.md`](./demo_walkthrough_script.md)
 
 ---
 
